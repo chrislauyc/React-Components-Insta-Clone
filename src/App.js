@@ -41,7 +41,7 @@ const App = () => {
 		 }
 	 });
 	 setAllPosts(updatedPosts);
-	 
+	 filterPosts();
   };
   const filterPosts = () => {
 	  setPosts(allPosts.filter((post)=>{
@@ -56,10 +56,24 @@ const App = () => {
 		  return(post.username.includes(searchTerm) || isFound);
 	  }));
   };
+  const updateSearchTerm = term =>{
+	  setSearchTerm(term);
+	  filterPosts();
+  };
+  const addComment = (id,comment) ->{
+	  setPosts(allPosts.map((post)=>{
+		  if(post.id === id){
+			  return {...post, comments:[...post.comments,comment]};
+		  }
+			else{
+				return post;
+			}
+	  }));
+  };
   return (
     <div className='App'>
       {/* Add SearchBar and Posts here to render them */}
-		<SearchBar />
+		<SearchBar updateSearchTerm={updateSearchTerm} />
 		<Posts posts={posts} likePost={likePost} />
       {/* Check the implementation of each component, to see what props they require, if any! */}
     </div>

@@ -4,14 +4,24 @@ import './Comments.css';
 
 const Comments = props => {
   // 🔥 Make sure the parent of Comments is passing the right props!
-  const { comments } = props;
-
+  const { comments, addComment ,id } = props;
+	const [commentText,setCommentText] = useState('');
   return (
     <div>
       {/* map through the comments prop and render a Comment for every piece of data */}
 		  {
 			  comments.map((comment)=><Comment comment={comment}/>)
 		  }
+		<form className='comment-form' onSubmit={()=>{addComment(commentText,id);setCommentText('')}}>
+			<label>
+				Comment
+				<textarea value={commentText} onChange={(e)=>{setCommentText(e.target.value)}} />
+			</label>
+			<input 
+				type='submit'
+				value='comment'
+			/>
+		</form>
     </div>
   );
 };
