@@ -10,7 +10,7 @@ const Comments = props => {
     <div>
       {/* map through the comments prop and render a Comment for every piece of data */}
 		  {
-			  comments.map((comment)=><Comment comment={comment}/>)
+			  comments.map((comment,i)=><div key={i}><Comment comment={comment}/></div>)
 		  }
 		<form className='comment-form' onSubmit={()=>{addComment(commentText,id);setCommentText('')}}>
 			<label>
