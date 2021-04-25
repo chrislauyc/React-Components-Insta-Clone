@@ -17,7 +17,6 @@ const App = () => {
   // Create a state called `posts` to hold the array of post objects, **initializing to dummyData**.
   // This state is the source of truth for the data inside the app. You won't be needing dummyData anymore.
   // To make the search bar work (which is stretch) we'd need another state to hold the search term.
-	const [allPosts,setAllPosts] = useState(dummyData);
 	const [posts, setPosts] = useState(dummyData);
 	const [searchTerm, setSearchTerm] = useState('');
 	const likePost = postId => {
@@ -32,7 +31,7 @@ const App = () => {
         - if the `id` of the post matches `postId`, return a new post object with the desired values (use the spread operator).
         - otherwise just return the post object unchanged.
      */
-	 const updatedPosts = allPosts.map((post)=>{
+	 const updatedPosts = posts.map((post)=>{
 		 if(post.id===postId){
 			 return{...post,likes:post.likes+1}
 		 }
@@ -40,29 +39,21 @@ const App = () => {
 			 return post;
 		 }
 	 });
-	 setAllPosts(updatedPosts);
-	 filterPosts();
+	 setPosts(updatedPosts);
   };
   const filterPosts = () => {
-	  setPosts(allPosts.filter((post)=>{
-		  const isFound = post.comments.reduce((isFound,comment)=>{
-			  if(isFound){
-				  return isFound;
-			  }
-			  else{
-				  return (comment.username.includes(searchTerm) || comment.text.includes(searchTerm));
-			  }
-		  },false);
-		  return(post.username.includes(searchTerm) || isFound);
-	  }));
+	  return posts.filter((post)=>{
+      const found = post.comments.find((comment)=>(comment.username.toLowerCase().includes(searchTerm) || comment.text.toLowerCase().includes(searchTerm)));
+		  return(post.username.includes(searchTerm) || found);
+	  });
   };
   const updateSearchTerm = term =>{
-	  setSearchTerm(term);
-	  filterPosts();
+	  setSearchTerm(term.toLowerCase());
   };
-  const addComment = (id,comment) ->{
-	  setPosts(allPosts.map((post)=>{
+  const addComment = (id,comment) =>{
+	  setPosts(posts.map((post)=>{
 		  if(post.id === id){
+        console.log(post,{...post, comments:[...post.comments,comment]})
 			  return {...post, comments:[...post.comments,comment]};
 		  }
 			else{
@@ -74,7 +65,7 @@ const App = () => {
     <div className='App'>
       {/* Add SearchBar and Posts here to render them */}
 		<SearchBar updateSearchTerm={updateSearchTerm} />
-		<Posts posts={posts} likePost={likePost} />
+		<Posts posts={searchTerm!==''?filterPosts(posts):posts} likePost={likePost} addComment={addComment}/>
       {/* Check the implementation of each component, to see what props they require, if any! */}
     </div>
   );
