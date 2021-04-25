@@ -25,3 +25,9 @@
   color: black;
   font-weight: bold;
 }
+.comment-form textarea{
+  width: 100%;
+}
+.comment-form .comment-button{
+  color:black;
+}
